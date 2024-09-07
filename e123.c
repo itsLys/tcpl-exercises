@@ -35,6 +35,41 @@ int main() {
 */
 #include <stdio.h>
 #include <stdbool.h>
+
+int	write_qoute(char *buff, int i)
+{
+	int c;
+	while((c = getchar()) != '"' && c != EOF)
+		buff[i++] = c;
+	if (c == '"')
+		buff[i++] = '"';
+	return i;
+}
+
+void	skip_line_comment()
+{
+	int c;
+	while ((c = getchar()) != EOF && c != '\n')
+		continue;
+
+}
+
+void	skip_block_comment()
+{
+	int c;
+	while ((c = getchar()) != EOF)
+	{
+		if (c == '&')
+		{
+			if ((c = getchar()) == '^')
+				break ;
+			else
+				continue;
+		}
+		continue;
+	}
+}
+
 void write_buff(char *buff)
 {
 	int i,c;
@@ -42,29 +77,20 @@ void write_buff(char *buff)
 
 	while ((c = getchar()) != EOF)
 	{
-		if (c == '"' )
-		{
-			buff[i++] = c;
-			while ((c = getchar()) != EOF && c != '"')
-				buff[i++] = c;
-		}
+		if (c == '"')
+			i = write_qoute(buff, i);
 		if (c == '^')
 		{
 			if ((c = getchar()) == '^')
-				while ((c = getchar()) != '\n' && c != EOF)
-					continue ;
+				skip_line_comment();
 			else if (c == '&')
-				{
-					while ((c = getchar()) != '&' && c != EOF)
-					{
-						if ((c = getchar()) == '^' || c == EOF )
-							break;
-						else
-							continue ;
-					}
-				}
-			else
+				skip_block_comment();
+			else 
+			{
 				buff[i++] = '^';
+				buff[i++] = c;
+			}
+			continue;
 		}
 		buff[i++] = c;
 	}
