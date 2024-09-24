@@ -1,17 +1,29 @@
-#include <stdio.h>
-#define INTBITS 32U
+#include "stdio.h"
+#define BITS 32U
 
-unsigned setbits(unsigned x, unsigned p, unsigned n, unsigned y)
+unsigned invert(unsigned x, unsigned p, unsigned n)
 {
-	unsigned x_mask = ~((~(0U) << (INTBITS - n)) >> (INTBITS - n - p + 1));
-	printf("%o\n", x_mask);
-	y = (y << (INTBITS - n)) >> (INTBITS - (n + p - 1));
-	return (x & x_mask) | y;
+	return x ^ (((~0U) << (BITS - n)) >> (BITS - p - 1U));
 }
 
 int main()
 {
-	printf("%o\n", setbits(0227, 4, 2, 071));
-
+	printf("%o\n", invert(036, 3, 2)); //
+	printf("%o\n", invert(036, 6, 3)); //0xee
 }
 
+
+// x == 0001 1110 (0036)
+// n == 3
+// p == 6
+// result == 0110 1110 (0156)
+//
+// y == x
+// y == 1001 1110
+// << bits - p - 1
+// 0011 1100
+// >> bits (p - n + 1) - 1
+// 0000 0001
+// << bits - (p - n + 1) - 1
+// ~0001 0000
+// 1110 1111
