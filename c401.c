@@ -32,7 +32,7 @@ bool find_patt(char *str, char *patt)
 		}
 		i++;
 	}
-	return false;
+	return ;
 }
 
 int main(int ac, char **av)
